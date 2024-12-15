@@ -55,7 +55,7 @@ const Login = () => {
             />
           </div>
 
-          <div class="justify-center">
+          <div class="flex space-x-3 justify-center">
             {/* Login Button */}
             <Button text="Login" onClick={handleLogin} color="bg-blue-500" />
 
