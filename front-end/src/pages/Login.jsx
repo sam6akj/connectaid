@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import Button from '../components/Button';
-import NavBar from '../components/NavBar';
+import { useNavigate } from 'react-router-dom';
+
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
   
   const handleLogin = (e) => {
     e.preventDefault();
@@ -14,10 +16,6 @@ const Login = () => {
 
   return (
     <div>
-    <div class="navbar">
-        <NavBar/>
-    </div>
-      
       {/* Login Form */}
       <div className="max-w-md mx-auto p-6 mt-10 bg-white rounded-md shadow-md">
         <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
@@ -55,12 +53,12 @@ const Login = () => {
             />
           </div>
 
-          <div class="flex space-x-3 justify-center">
+          <div className="flex space-x-3 justify-center">
             {/* Login Button */}
             <Button text="Login" onClick={handleLogin} color="bg-blue-500" />
 
             {/* SignUp Button */}
-            <Button text="Sign Up" color="bg-blue-500"/>
+            <Button text="Sign Up" onClick={()=>navigate('/signup')}color="bg-blue-500"/>
           </div>
         </form>
       </div>
