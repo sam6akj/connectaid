@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Button from '../components/Button';
-import NavBar from '../components/NavBar';
 
 const SignUp = () =>{
     const [firstName,setFirstName] = useState('');
@@ -19,9 +18,6 @@ const SignUp = () =>{
 
     return(
         <div>
-            <div class="navbar">
-                <NavBar/>
-            </div>
             <div className="max-w-md mx-auto p-6 mt-10 bg-white rounded-md shadow-md">
                 <h2 className="text-2xl font-bold text-center mb-6">Sign Up</h2>
                 <form onSubmit={handleSignup}>
@@ -109,7 +105,7 @@ const SignUp = () =>{
                         />
                     </div>
 
-                    <div class="flex space-x-3 justify-center">
+                    <div className="flex space-x-3 justify-center">
                         {/* SignUp Button */}
                         <Button text="Sign Up" color="bg-blue-500"/>
                     </div>
