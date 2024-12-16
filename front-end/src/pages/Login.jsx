@@ -16,7 +16,7 @@ const Login = () => {
     <div>
     <div class="navbar">
         <NavBar/>
-      </div>
+    </div>
       
       {/* Login Form */}
       <div className="max-w-md mx-auto p-6 mt-10 bg-white rounded-md shadow-md">
