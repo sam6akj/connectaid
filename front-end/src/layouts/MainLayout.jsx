@@ -15,14 +15,12 @@ const MainLayout = ({ children }) => {
   };
 
   return (
-    <div className="flex bg-gray-50 min-h-screen relative">
+    <div className="flex bg-gray-50 min-h-screen">
       <Sidebar isOpen={sidebarOpen} onClose={handleCloseSidebar} />
-      
-      <div className="flex flex-col flex-1 lg:pl-64">
+
+      <div className={`flex flex-col flex-1 transition-all duration-300 ${sidebarOpen ? 'ml-64' : 'ml-0'}`}>
         <TopBar onToggleSidebar={handleToggleSidebar} />
-        <main className="flex-1 p-6">
-          {children}
-        </main>
+        <main className="flex-1 p-6">{children}</main>
       </div>
     </div>
   );
