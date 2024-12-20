@@ -1,29 +1,50 @@
 import React, { useState } from 'react';
 import Button from '../components/Button';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState(null);
   const navigate = useNavigate();
-  
-  const handleLogin = (e) => {
-    e.preventDefault();
-    // For now, just log email and password (later replace it with an API call)
-    console.log('Logging in with:', email, password);
 
-    navigate('/main');
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    try {
+      setLoading(true);
+      setMessage(null);
+
+      const response = await axios.post('/api/users/login', { email, password });
+
+      setMessage(response.data.message); // Display success message
+      setLoading(false);
+
+      navigate('/main');
+    } catch (error) {
+      setLoading(false);
+
+      if (error.response) {
+        setMessage(error.response.data.message); // Display error from server
+      } else {
+        setMessage('An error occurred. Please try again.');
+      }
+    }
   };
 
   return (
     <div>
-      {/* Login Form */}
       <div className="max-w-md mx-auto p-6 mt-10 bg-white rounded-md shadow-md">
         <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
-        
+        {message && (
+          <p className={`text-center mb-4 ${message.includes('successful') ? 'text-green-500' : 'text-red-500'}`}>
+            {message}
+          </p>
+        )}
         <form onSubmit={handleLogin}>
-          {/* Email input */}
           <div className="mb-4">
             <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
               Email
@@ -39,7 +60,6 @@ const Login = () => {
             />
           </div>
 
-          {/* Password input */}
           <div className="mb-6">
             <label htmlFor="password" className="block text-sm font-semibold text-gray-700 mb-2">
               Password
@@ -56,11 +76,12 @@ const Login = () => {
           </div>
 
           <div className="flex space-x-3 justify-center">
-            {/* Login Button */}
-            <Button text="Login" onClick={handleLogin} color="bg-blue-500" />
-
-            {/* SignUp Button */}
-            <Button text="Sign Up" onClick={()=>navigate('/signup')}color="bg-blue-500"/>
+            <Button
+              text={loading ? 'Logging in...' : 'Login'}
+              type="submit"
+              color="bg-blue-500"
+              disabled={loading}
+            />
           </div>
         </form>
       </div>

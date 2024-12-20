@@ -31,7 +31,7 @@ const Sidebar = ({ isOpen, onClose }) => {
         </NavLink>
 
         <NavLink
-          to="/main/add-donation-call"
+          to="/main/add-donation"
           className={({ isActive }) =>
             `block py-2 px-3 rounded-md flex items-center text-gray-700 hover:bg-gray-200 transition-colors ${
               isActive ? 'bg-gray-300 font-semibold' : ''

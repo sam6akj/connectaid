@@ -1,41 +1,35 @@
-import bycrpt from "bcryptjs";
+import bcrypt from 'bcryptjs';
 import User from "../models/User.js";
 
+const addUser = async (req, res) => {
+  const { firstName, lastName, email, password, dateOfBirth } = req.body;
 
-const addUser = async (req , res) =>{
-    const {firstName,lastName,email,password,dateOfBirth} = req.body;
-
-    const user = User.findOne({email});
-    try{
-        if(user){
-            //400 is bad request
-            res.status(400).json({message:"User already exists"});
-        }else{
-            //hashing the password for better security
-            const salt = bycrpt.genSalt(10);
-            const hashedPassword = bycrpt.hash(password,salt);
-
-
-            //create new user
-            const newUser = new User(
-                firstName,
-                lastName,
-                email,
-                hashedPassword,
-                dateOfBirth
-            );
-
-            await newUser.save();
-
-
-            //201 is when a new resource is created
-            res.status(201).json({message:"User registered succesfully!"});
-        }
-
-    }catch(err){
-        //500 is internal server error
-        res.status(500).json({message:`Server Error: ${err}`});
+  try {
+    // Check if the user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists" });
     }
+
+    // Hash the password for security
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const newUser = new User({
+      firstName,
+      lastName,
+      email,
+      password: hashedPassword,
+      dateOfBirth
+    });
+
+    await newUser.save();
+
+    res.status(201).json({ message: "User registered successfully!" });
+  } catch (err) {
+    console.error("Error creating user:", err);
+    res.status(500).json({ message: `Server Error: ${err.message}` });
+  }
 };
 
 
