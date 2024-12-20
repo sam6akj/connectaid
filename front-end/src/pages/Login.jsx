@@ -12,6 +12,8 @@ const Login = () => {
     e.preventDefault();
     // For now, just log email and password (later replace it with an API call)
     console.log('Logging in with:', email, password);
+
+    navigate('/main');
   };
 
   return (
