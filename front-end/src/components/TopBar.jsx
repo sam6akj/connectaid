@@ -5,8 +5,8 @@ const TopBar = ({ onToggleSidebar }) => {
   const navigate = useNavigate();
   return (
     <div className="w-full h-16 bg-black border-b border-gray-200 flex items-center px-4 shadow-sm">
-      <button className="lg:hidden mr-4 focus:outline-none" onClick={onToggleSidebar}>
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <button className="mr-4 focus:outline-none" onClick={onToggleSidebar}>
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
         </svg>
       </button>
