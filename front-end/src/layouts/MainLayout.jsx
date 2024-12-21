@@ -1,26 +1,54 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/SideBar';
 import TopBar from '../components/TopBar';
-import '../styles/main-layout.css';
+import {jwtDecode} from 'jwt-decode';
 
 const MainLayout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
-  const handleToggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+
+    try {
+      const decoded = jwtDecode(token);
+      setUser(decoded);
+    } catch (error) {
+      localStorage.removeItem('authToken');
+      navigate('/login');
+    }
+  }, [navigate]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('authToken');
+    navigate('/login');
   };
 
-  const handleCloseSidebar = () => {
-    setSidebarOpen(false);
-  };
+  if (!user) return null;
 
   return (
     <div className="flex bg-gray-50 min-h-screen">
-      <Sidebar isOpen={sidebarOpen} onClose={handleCloseSidebar} />
+      <Sidebar 
+        isOpen={sidebarOpen} 
+        onClose={() => setSidebarOpen(false)} 
+        userName={`${user.firstName} ${user.lastName}`}
+      />
 
       <div className={`flex flex-col flex-1 transition-all duration-300 ${sidebarOpen ? 'ml-64' : 'ml-0'}`}>
-        <TopBar onToggleSidebar={handleToggleSidebar} />
-        <main className="flex-1 p-6">{children}</main>
+        <TopBar 
+          onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} 
+          userName={`${user.firstName} ${user.lastName}`}
+          onLogout={handleLogout}
+        />
+        <main className="flex-1 p-6">
+          {children}
+        </main>
       </div>
     </div>
   );

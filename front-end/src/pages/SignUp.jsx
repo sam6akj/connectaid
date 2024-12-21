@@ -29,7 +29,7 @@ const SignUp = () => {
             setMessage(response.data.message); // Show success message
             setLoading(false);
 
-            // Clear the form after successful signup
+            
             setFirstName('');
             setLastName('');
             setEmail('');

@@ -1,57 +1,97 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { HomeIcon, PlusIcon, EyeIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import '../styles/main-layout.css';
+import {
+  HomeIcon,
+  PlusIcon,
+  HeartIcon,
+  UserCircleIcon,
+  XMarkIcon,
+  Squares2X2Icon,
+} from '@heroicons/react/24/outline';
 
-const Sidebar = ({ isOpen, onClose }) => {
+const Sidebar = ({ isOpen, onClose, userName }) => {
   return (
     <div
       className={`sidebar-container bg-white border-r border-gray-200 h-screen p-4 w-64 fixed top-0 left-0 z-50 flex flex-col 
         ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300`}
-      style={{ background: 'linear-gradient(to bottom right, #f9fafb, #e2e8f0)' }}
     >
-      <div className="sidebar-header mb-6 flex items-center justify-between">
-        <h2 className="text-gray-800 text-xl font-bold">Menu</h2>
-        <button className="close-btn" onClick={onClose} aria-label="Close Sidebar">
-          <XMarkIcon className="h-6 w-6 text-gray-600" />
-        </button>
+      <div className="sidebar-header mb-6">
+        <div className="flex items-center justify-between">
+          <h2 className="text-gray-800 text-xl font-bold">Menu</h2>
+          <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+            <XMarkIcon className="h-6 w-6" />
+          </button>
+        </div>
+        <div className="mt-4 p-3 bg-gray-50 rounded-md">
+          <p className="text-sm text-gray-600">Welcome,</p>
+          <p className="font-medium text-gray-800">{userName}</p>
+        </div>
       </div>
 
       <nav className="space-y-4">
+        {/* Browse Donations */}
         <NavLink
           to="/main"
           className={({ isActive }) =>
-            `block py-2 px-3 rounded-md flex items-center text-gray-700 hover:bg-gray-200 transition-colors ${
-              isActive ? 'bg-gray-300 font-semibold' : ''
+            `flex items-center space-x-2 px-4 py-2 rounded-md transition-colors ${
+              isActive ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-100'
             }`
           }
         >
-          <HomeIcon className="h-5 w-5 mr-3 text-gray-600" />
-          Donate
+          <HomeIcon className="h-5 w-5" />
+          <span>Browse Donations</span>
         </NavLink>
 
+        {/* My Appeals */}
+        <NavLink
+          to="/main/my-appeals"
+          className={({ isActive }) =>
+            `flex items-center space-x-2 px-4 py-2 rounded-md transition-colors ${
+              isActive ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-100'
+            }`
+          }
+        >
+          <Squares2X2Icon className="h-5 w-5" />
+          <span>My Appeals</span>
+        </NavLink>
+
+        {/* My Contributions */}
+        <NavLink
+          to="/main/my-contributions"
+          className={({ isActive }) =>
+            `flex items-center space-x-2 px-4 py-2 rounded-md transition-colors ${
+              isActive ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-100'
+            }`
+          }
+        >
+          <HeartIcon className="h-5 w-5" />
+          <span>My Contributions</span>
+        </NavLink>
+
+        {/* Create Appeal */}
         <NavLink
           to="/main/add-donation"
           className={({ isActive }) =>
-            `block py-2 px-3 rounded-md flex items-center text-gray-700 hover:bg-gray-200 transition-colors ${
-              isActive ? 'bg-gray-300 font-semibold' : ''
+            `flex items-center space-x-2 px-4 py-2 rounded-md transition-colors ${
+              isActive ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-100'
             }`
           }
         >
-          <PlusIcon className="h-5 w-5 mr-3 text-gray-600" />
-          Add Donation Call
+          <PlusIcon className="h-5 w-5" />
+          <span>Create Appeal</span>
         </NavLink>
 
+        {/* Profile */}
         <NavLink
-          to="/main/view-donation-calls"
+          to="/main/edit-profile"
           className={({ isActive }) =>
-            `block py-2 px-3 rounded-md flex items-center text-gray-700 hover:bg-gray-200 transition-colors ${
-              isActive ? 'bg-gray-300 font-semibold' : ''
+            `flex items-center space-x-2 px-4 py-2 rounded-md transition-colors ${
+              isActive ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-100'
             }`
           }
         >
-          <EyeIcon className="h-5 w-5 mr-3 text-gray-600" />
-          View Donation Calls
+          <UserCircleIcon className="h-5 w-5" />
+          <span>Edit Profile</span>
         </NavLink>
       </nav>
     </div>

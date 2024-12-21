@@ -20,7 +20,9 @@ const addUser = async (req, res) => {
       lastName,
       email,
       password: hashedPassword,
-      dateOfBirth
+      dateOfBirth,
+      donationsMade: [],
+      donationAppeals: []
     });
 
     await newUser.save();

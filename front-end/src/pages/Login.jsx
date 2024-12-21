@@ -20,7 +20,8 @@ const Login = () => {
 
       const response = await axios.post('/api/users/login', { email, password });
 
-      setMessage(response.data.message); // Display success message
+      localStorage.setItem('authToken', response.data.token);
+      setMessage(response.data.message); 
       setLoading(false);
 
       navigate('/main');
