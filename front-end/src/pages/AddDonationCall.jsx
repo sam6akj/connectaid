@@ -14,47 +14,45 @@ const AddDonationCall = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    try{
-        setLoading(true);
-        setMessage(null);
-
-        // for file upload
-        const formData = new FormData();
-        formData.append('title', title);
-        formData.append('goal', goal);
-        formData.append('category', category);
-        formData.append('description', description);
-        if (image) formData.append('image', image);
-
-        const token = localStorage.getItem("authToken");
-
-        const response = await axios.post('/api/users/donation-appeals', formData, {
-          headers: { 'Content-Type': 'multipart/form-data',
+  
+    if (!title || !goal || !category || !description) {
+      setMessage('All fields are required');
+      return;
+    }
+  
+    try {
+      setLoading(true);
+      setMessage(null);
+  
+      const formData = new FormData();
+      formData.append('title', title.trim());
+      formData.append('goal', Number(goal));
+      formData.append('category', category);
+      formData.append('description', description.trim());
+      if (image) formData.append('image', image);
+  
+      const token = localStorage.getItem("authToken");
+  
+      const response = await axios.post('/api/users/donation-appeals', formData, {
+        headers: { 
           Authorization: `Bearer ${token}`,
-          },
-         
-        });
-
-        setMessage(response.data.message); 
-        setLoading(false);
-
-        // Reset form
-        setTitle('');
-        setGoal('');
-        setCategory('');
-        setDescription('');
-        setImage(null);
-    }catch(error){
+        }
+      });
+  
+      setMessage(response.data.message);
       setLoading(false);
-      if (error.response) {
-          // Server responded with a status other than 200
-          setMessage(error.response.data.message);
-      } else {
-          setMessage('An error occurred. Please try again.');
-      }
-
-  }
+  
+      // Reset form only on success
+      setTitle('');
+      setGoal('');
+      setCategory('');
+      setDescription('');
+      setImage(null);
+    } catch (error) {
+      setLoading(false);
+      const errorMessage = error.response?.data?.message || 'An error occurred. Please try again.';
+      setMessage(errorMessage);
+    }
 };
 
   return (
@@ -76,7 +74,7 @@ const AddDonationCall = () => {
 
         <FormInput
           type="number"
-          label="Goal Amount ($)"
+          label="Goal Amount (PKR)"
           value={goal}
           onChange={(e) => setGoal(e.target.value)}
           placeholder="Enter your donation goal amount"

@@ -1,51 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DonationFilterBar from '../components/DonationFilterBar';
 import DonationCallCard from '../components/DonationCallCard';
 import '../styles/donation-list.css';
+import axios from 'axios';
 
 const DonationCallsList = () => {
+  const [donationCalls, setDonationCalls] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOption, setSortOption] = useState("recent");
   const [selectedCategory, setSelectedCategory] = useState("All");
 
-  const donationCalls = [
-    {
-      id: 1,
-      title: "Help Build a School in Kenya",
-      description: "We aim to construct new classrooms and provide educational materials for children in rural Kenya.",
-      image: "https://via.placeholder.com/600x400",
-      category: "Education",
-      goal: 5000,
-      raised: 2000
-    },
-    {
-      id: 2,
-      title: "Clean Water Initiative",
-      description: "Providing access to clean and safe drinking water to communities without a reliable water source.",
-      image: "https://via.placeholder.com/600x400",
-      category: "Health",
-      goal: 3000,
-      raised: 1500
-    },
-    {
-      id: 3,
-      title: "Planting Trees in the Amazon",
-      description: "Restore deforested areas by planting thousands of trees and preserving biodiversity.",
-      image: "https://via.placeholder.com/600x400",
-      category: "Environment",
-      goal: 10000,
-      raised: 2500
-    },
-    {
-      id: 4,
-      title: "Community Center for Youth",
-      description: "A safe space for youth to learn, play, and receive mentorship in underserved neighborhoods.",
-      image: "https://via.placeholder.com/600x400",
-      category: "Community",
-      goal: 4000,
-      raised: 1000
-    }
-  ];
+  useEffect(() => {
+    const fetchDonationCalls = async () => {
+      try {
+        const response = await axios.get('/api/users/donation-appeals'); //ssome problem here /all was added
+        setDonationCalls(response.data);
+      } catch (err) {
+        setError(err.response?.data?.message || 'Failed to fetch donation calls');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDonationCalls();
+  }, []);
 
   const filteredCalls = donationCalls.filter(call => {
     const matchesSearch = call.title.toLowerCase().includes(searchTerm.toLowerCase());
@@ -55,7 +35,7 @@ const DonationCallsList = () => {
 
   const sortedCalls = [...filteredCalls].sort((a, b) => {
     if (sortOption === "recent") {
-      return b.id - a.id;
+      return new Date(b.createdAt) - new Date(a.createdAt);
     } else if (sortOption === "goal_asc") {
       return a.goal - b.goal;
     } else if (sortOption === "goal_desc") {
@@ -63,6 +43,10 @@ const DonationCallsList = () => {
     }
     return 0;
   });
+
+  if (loading) return <div className="text-center mt-8">Loading...</div>;
+  if (error) return <div className="text-red-500 text-center mt-8">{error}</div>;
+
 
   return (
     <div className="bg-gray-50 min-h-screen">
