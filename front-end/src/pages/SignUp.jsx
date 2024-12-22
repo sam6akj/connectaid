@@ -26,7 +26,7 @@ const SignUp = () => {
                 dateOfBirth: birthDate,
             });
 
-            setMessage(response.data.message); // Show success message
+            setMessage(response.data.message); 
             setLoading(false);
 
             
