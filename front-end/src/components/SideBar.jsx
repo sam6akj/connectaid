@@ -39,7 +39,7 @@ const Sidebar = ({ isOpen, onClose, userName }) => {
           }
         >
           <HomeIcon className="h-5 w-5" />
-          <span>Browse Donations</span>
+          <span>Home</span>
         </NavLink>
 
         {/* My Appeals */}
@@ -52,7 +52,7 @@ const Sidebar = ({ isOpen, onClose, userName }) => {
           }
         >
           <Squares2X2Icon className="h-5 w-5" />
-          <span>My Appeals</span>
+          <span>My Donation Appeals</span>
         </NavLink>
 
         {/* My Contributions */}

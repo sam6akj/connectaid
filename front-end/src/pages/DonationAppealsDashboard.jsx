@@ -31,6 +31,18 @@ const DonationAppealsDashboard = () => {
     return Math.min((raised / goal) * 100, 100);
   };
 
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) return '/placeholder-image.jpg'; // Replace with your placeholder image
+    
+    // If the path already starts with http/https, return as is
+    if (imagePath.startsWith('http')) return imagePath;
+    
+    // Remove any leading slashes and combine with your backend URL
+    const cleanPath = imagePath.replace(/^\/+/, '');
+    // Use your backend URL (adjust if different)
+    return `${window.location.origin}/${cleanPath}`;
+  };
+
   if (loading) return <div className="text-center mt-8">Loading...</div>;
   if (error) return <div className="text-red-500 text-center mt-8">{error}</div>;
 
@@ -54,12 +66,18 @@ const DonationAppealsDashboard = () => {
       ) : (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {appeals.map((appeal) => (
-            <div key={appeal._id} className="overflow-hidden">
-              <img 
-                src={appeal.image} 
-                alt={appeal.title} 
-                className="w-full h-48 object-cover"
-              />
+            <div key={appeal._id} className="bg-white rounded-lg shadow-md overflow-hidden">
+              <div className="relative h-48">
+                <img 
+                  src={getImageUrl(appeal.image)}
+                  alt={appeal.title}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.target.onerror = null; // Prevent infinite loop
+                    e.target.src = '/placeholder-image.jpg'; // Replace with your placeholder image
+                  }}
+                />
+              </div>
               <div className="p-6">
                 <h3 className="text-xl font-semibold mb-2">{appeal.title}</h3>
                 <div className="space-y-2 mb-4">
