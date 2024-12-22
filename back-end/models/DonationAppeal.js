@@ -6,7 +6,7 @@ const DonationAppealSchema = new mongoose.Schema({
     category: { type: String, required: true },
     goal: { type: Number, required: true },
     raised: { type: Number, default: 0 },
-    image: { type: String, required: true },
+    image: { type: String},
     status: { 
       type: String, 
       enum: ['active', 'completed', 'cancelled'],

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import FormInput from '../components/FormInput';
 import '../styles/add-donation.css';
+import axios from 'axios';
 
 const AddDonationCall = () => {
   const [title, setTitle] = useState('');
@@ -8,38 +9,62 @@ const AddDonationCall = () => {
   const [category, setCategory] = useState('');
   const [description, setDescription] = useState('');
   const [image, setImage] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState(null);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const formData = new FormData();
-    formData.append('title', title);
-    formData.append('goal', goal);
-    formData.append('category', category);
-    formData.append('description', description);
-    if (image) {
-      formData.append('image', image);
-    }
+    try{
+        setLoading(true);
+        setMessage(null);
 
-    console.log('Submitted Donation Call:', {
-      title,
-      goal,
-      category,
-      description,
-      image,
-    });
+        // for file upload
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('goal', goal);
+        formData.append('category', category);
+        formData.append('description', description);
+        if (image) formData.append('image', image);
 
-    // Reset form
-    setTitle('');
-    setGoal('');
-    setCategory('');
-    setDescription('');
-    setImage(null);
-  };
+        const token = localStorage.getItem("authToken");
+
+        const response = await axios.post('/api/users/donation-appeals', formData, {
+          headers: { 'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+          },
+         
+        });
+
+        setMessage(response.data.message); 
+        setLoading(false);
+
+        // Reset form
+        setTitle('');
+        setGoal('');
+        setCategory('');
+        setDescription('');
+        setImage(null);
+    }catch(error){
+      setLoading(false);
+      if (error.response) {
+          // Server responded with a status other than 200
+          setMessage(error.response.data.message);
+      } else {
+          setMessage('An error occurred. Please try again.');
+      }
+
+  }
+};
 
   return (
     <div className="max-w-3xl mx-auto mt-10 bg-white p-6 rounded-md shadow-md">
       <h1 className="text-2xl font-bold text-gray-800 mb-6">Add Donation Call</h1>
+      {message && (
+                    <p className={`text-center mb-4 ${message.includes('successfully') ? 'text-green-500' : 'text-red-500'}`}>
+                        {message}
+                    </p>
+      )}
       <form onSubmit={handleSubmit} encType="multipart/form-data">
         <FormInput
           label="Title"
@@ -102,8 +127,10 @@ const AddDonationCall = () => {
         <button
           type="submit"
           className="submit-btn bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-all"
+          disabled={loading}
         >
-          Submit
+          {loading ? 'Submitting...' : 'Submit'}
+          
         </button>
       </form>
     </div>

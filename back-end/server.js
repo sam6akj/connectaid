@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import express from "express";
 import userRouter from "./routes/UserRoutes.js";
+import fileRouter from "./routes/FileUploadRoute.js";
 
 dotenv.config();
 
@@ -23,6 +24,8 @@ app.use(express.json());
 
 
 app.use("/api/users", userRouter);
+app.use("/api/users",fileRouter);
+app.use('/uploads', express.static('uploads'));
 
 
 // app.get("/api/users/test", (req, res) => {

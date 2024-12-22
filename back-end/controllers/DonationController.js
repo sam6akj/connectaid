@@ -7,12 +7,19 @@ export const createDonationAppeal = async (req, res) => {
     const { title, description, category, goal, image } = req.body;
     const userId = req.user.userId; // From JWT auth middleware
 
+    if (!userId) {
+      return res.status(401).json({ message: 'Unauthorized: No user found in token' });
+    }
+    if (!title || !description || !category || !goal) {
+      return res.status(400).json({ message: 'All fields are required' });
+    }
+    
     const appeal = new DonationAppeal({
       title,
       description,
       category,
       goal,
-      image,
+      image:req.file ? req.file.path : null,
       creator: userId
     });
 
