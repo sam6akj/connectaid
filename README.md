@@ -45,7 +45,7 @@ A Donation platform that connects donors to people in need. Created using MERN S
 
   ```sh
     cd back-end
-    node server.js
+    npm start
   ```
 ### front-end
 
