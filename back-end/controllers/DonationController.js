@@ -107,3 +107,14 @@ export const makeDonation = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+
+export const getAllDonationAppeals = async (req, res) => {
+  try {
+    const appeals = await DonationAppeal.find()
+      .sort({ createdAt: -1 });
+    res.json(appeals);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
