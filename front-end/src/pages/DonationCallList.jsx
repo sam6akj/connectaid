@@ -15,15 +15,16 @@ const DonationCallsList = () => {
   useEffect(() => {
     const fetchDonationCalls = async () => {
       try {
-        const response = await axios.get('/api/users/donation-appeals'); //ssome problem here /all was added
+        const response = await axios.get('/api/users/donation-appeals/all');
         setDonationCalls(response.data);
       } catch (err) {
         setError(err.response?.data?.message || 'Failed to fetch donation calls');
+        console.error('Error details:', err);
       } finally {
         setLoading(false);
       }
     };
-
+      
     fetchDonationCalls();
   }, []);
 
