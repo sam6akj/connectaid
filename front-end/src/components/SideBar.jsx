@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { NavLink } from 'react-router-dom';
 import {
   HomeIcon,
@@ -7,10 +7,14 @@ import {
   UserCircleIcon,
   XMarkIcon,
   Squares2X2Icon,
+  WalletIcon,
 } from '@heroicons/react/24/outline';
+import WalletPopup from './WalletPopup';
 
 const Sidebar = ({ isOpen, onClose, userName }) => {
+  const [isWalletOpen, setIsWalletOpen] = useState(false);
   return (
+    <>
     <div
       className={`sidebar-container bg-white border-r border-gray-200 h-screen p-4 w-64 fixed top-0 left-0 z-50 flex flex-col 
         ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300`}
@@ -81,6 +85,15 @@ const Sidebar = ({ isOpen, onClose, userName }) => {
           <span>Create Appeal</span>
         </NavLink>
 
+        {/* Wallet */}
+        <button
+            onClick={()=>{setIsWalletOpen(true)}}
+            className="flex items-center space-x-2 px-4 py-2 rounded-md transition-colors text-gray-700 hover:bg-gray-100 w-full"
+          >
+            <WalletIcon className="h-5 w-5" />
+            <span>Wallet</span>
+          </button>
+
         {/* Profile */}
         <NavLink
           to="/main/edit-profile"
@@ -95,6 +108,12 @@ const Sidebar = ({ isOpen, onClose, userName }) => {
         </NavLink>
       </nav>
     </div>
+
+    <WalletPopup 
+    isOpen={isWalletOpen} 
+    onClose={() => setIsWalletOpen(false)} 
+    />
+    </>
   );
 };
 
