@@ -10,6 +10,7 @@ import MainLayout from './layouts/MainLayout';
 import AddDonationCall from './pages/AddDonationCall';
 import UserContributions from './pages/UserContributions';
 import DonationAppealsDashboard from './pages/DonationAppealsDashboard';
+import SingleDonation from "./pages/SingleDonation";
 
 // Protected Route wrapper component
 const ProtectedRoute = ({ children }) => {
@@ -28,6 +29,11 @@ function App() {
         <Route path="/" element={<><NavBar /><Home /></>} />
         <Route path="/login" element={<><NavBar /><Login /></>} />
         <Route path="/signup" element={<><NavBar /><SignUp /></>} />
+        <Route path="/donation-calls/:id" element={
+          <MainLayout>
+            <SingleDonation />
+          </MainLayout>
+        } />
 
         {/* Protected routes */}
         <Route path="/main" element={
@@ -61,6 +67,14 @@ function App() {
             </MainLayout>
           </ProtectedRoute>
         } />
+
+        <Route path="/main/donation-calls/:id" element={
+            <ProtectedRoute>
+              <MainLayout>
+                <SingleDonation />
+              </MainLayout>
+            </ProtectedRoute>
+          } />
       </Routes>
     </Router>
   );

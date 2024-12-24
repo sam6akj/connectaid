@@ -34,7 +34,7 @@ const DonationCallCard = ({ call }) => {
           </div>
         </div>
         <button
-          onClick={() => navigate(`/donation-calls/${call.id}`)}
+          onClick={() => navigate(`/main/donation-calls/${call._id}`)}
           className="mt-auto bg-blue-600 hover:bg-blue-700 text-white text-center py-2 rounded-md font-medium"
         >
           View Details

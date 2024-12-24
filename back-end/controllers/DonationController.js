@@ -118,3 +118,23 @@ export const getAllDonationAppeals = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+
+export const getDonationAppeal = async (req, res) => {
+  try {
+    const appeal = await DonationAppeal.findById(req.params.id)
+      .populate('creator', 'name')
+      .populate({
+        path: 'donations',
+        populate: { path: 'donor', select: 'name' }
+      });
+      
+    if (!appeal) {
+      return res.status(404).json({ message: 'Donation appeal not found' });
+    }
+    
+    res.json(appeal);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

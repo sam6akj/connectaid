@@ -105,7 +105,7 @@ const DonationAppealsDashboard = () => {
                     Edit
                   </button>
                   <button
-                    onClick={() => navigate(`/donation-calls/${appeal._id}`)}
+                    onClick={() => navigate(`/main/donation-calls/${appeal._id}`)}
                     className="flex items-center gap-1 px-3 py-1 bg-gray-100 rounded hover:bg-gray-200"
                   >
                     <EyeIcon className="h-4 w-4" />
