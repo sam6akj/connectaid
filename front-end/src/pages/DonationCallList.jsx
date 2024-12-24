@@ -62,7 +62,7 @@ const DonationCallsList = () => {
       </div>
 
       {/* Filter Bar */}
-      <div className="max-w-7xl mx-auto -mt-8 px-4 mt-4">
+      <div className="max-w-7xl mx-auto px-4 mt-4">
         <DonationFilterBar
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
