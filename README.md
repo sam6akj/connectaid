@@ -5,7 +5,7 @@ A Donation platform that connects donors to people in need. Created using MERN S
 
   - Node
   - npm
-  - MongoDB Atlas Account
+  - MongoDB Atlas account or locally installed 
 
 ## Get Started
 
@@ -33,6 +33,8 @@ A Donation platform that connects donors to people in need. Created using MERN S
 1. Create a clustor on MongoDB Atlas
 
 2. Create .env file in **back-end** directory
+
+    Use a MongoDB connection string
    
     ```sh
     MONGODB_URI = mongodb+srv://<username>:<password>@<cluster-name>.bqydw.mongodb.net/?retryWrites=true&w=majority&appName=<clustor-name>
