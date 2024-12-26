@@ -8,7 +8,8 @@ const EditProfile = () => {
   const [userData, setUserData] = useState({
     firstName: '',
     lastName: '',
-    password: '',
+    password: '', // Old password
+    newPassword: '', // New password (optional)
     dateOfBirth: '',
   });
   const [loading, setLoading] = useState(true);
@@ -20,9 +21,14 @@ const EditProfile = () => {
       try {
         const token = localStorage.getItem('authToken');
         const response = await axios.get('/api/users/profile', {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { Authorization: `Bearer ${token}` },
         });
-        setUserData(response.data);
+        setUserData((prev) => ({
+          ...prev,
+          firstName: response.data.firstName,
+          lastName: response.data.lastName,
+          dateOfBirth: response.data.dateOfBirth,
+        }));
       } catch (err) {
         setError(err.response?.data?.message || 'Failed to fetch user data');
       } finally {
@@ -37,9 +43,13 @@ const EditProfile = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('authToken');
-      await axios.put('/api/users/profile', userData, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await axios.put(
+        '/api/users/profile',
+        userData,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setMessage('Profile updated successfully');
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to update profile');
@@ -47,11 +57,15 @@ const EditProfile = () => {
   };
 
   const handleDeleteAccount = async () => {
-    if (window.confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+    if (
+      window.confirm(
+        'Are you sure you want to delete your account? This action cannot be undone.'
+      )
+    ) {
       try {
         const token = localStorage.getItem('authToken');
         await axios.delete('/api/users/profile', {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { Authorization: `Bearer ${token}` },
         });
         localStorage.removeItem('authToken');
         navigate('/');
@@ -69,42 +83,52 @@ const EditProfile = () => {
 
       {message && <p className="text-green-500 mb-4">{message}</p>}
       {error && <p className="text-red-500 mb-4">{error}</p>}
-      
+
       <form onSubmit={handleSubmit} className="space-y-6">
         <FormInput
           label="First Name"
           value={userData.firstName}
-          onChange={(e) => setUserData({ ...userData, firstName: e.target.value })}
-          required
-        />
-        
-        <FormInput
-          label="Last Name"
-          value={userData.lastName}
-          onChange={(e) => setUserData({ ...userData, lastName: e.target.value })}
-          required
-        />
-        
-        <FormInput
-          label="Old Password"
-          type="text"
-          placeholder="Enter Your Password"
-          onChange={(e) => setUserData({ ...userData, password: e.target.value })}
+          onChange={(e) =>
+            setUserData({ ...userData, firstName: e.target.value })
+          }
           required
         />
 
         <FormInput
-          label="New Password"
-          type="password"
-          onChange={(e) => setUserData({ ...userData, password: e.target.value })}
+          label="Last Name"
+          value={userData.lastName}
+          onChange={(e) =>
+            setUserData({ ...userData, lastName: e.target.value })
+          }
           required
         />
-        
+
+        <FormInput
+          label="Old Password"
+          type="password"
+          placeholder="Enter Your Old Password"
+          onChange={(e) =>
+            setUserData({ ...userData, password: e.target.value })
+          }
+          required
+        />
+
+        <FormInput
+          label="New Password (Optional)"
+          type="password"
+          placeholder="Enter Your New Password"
+          onChange={(e) =>
+            setUserData({ ...userData, newPassword: e.target.value })
+          }
+        />
+
         <FormInput
           label="Date of Birth"
           type="date"
           value={userData.dateOfBirth.split('T')[0]}
-          onChange={(e) => setUserData({ ...userData, dateOfBirth: e.target.value })}
+          onChange={(e) =>
+            setUserData({ ...userData, dateOfBirth: e.target.value })
+          }
           required
         />
 
