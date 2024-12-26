@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 import User from "../models/User.js";
 import mongoose from 'mongoose';
+import DonationAppeal from '../models/DonationAppeal.js';
 
 export const addUser = async (req, res) => {
   const { firstName, lastName, email, password, dateOfBirth } = req.body;
@@ -47,25 +48,43 @@ export const getUserProfile = async (req, res) => {
 
 export const updateUserProfile = async (req, res) => {
   try {
-    const { firstName, lastName, password, dateOfBirth } = req.body;
+    const { firstName, lastName, password, newPassword, dateOfBirth } = req.body;
 
-    const isMatch = await bcrypt.compare(password, req.user.password);
-    
-    if (!isMatch) {
-      return res.status(401).json({ message: 'Invalid credentials' });
+    // Fetch user from database
+    const user = await User.findById(req.user.userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
     }
 
-    const updatedUser = await User.findByIdAndUpdate(
-      req.user.userId,
-      { firstName, lastName, password:hashedPassword, dateOfBirth },
-      { new: true }
-    ).select('-email');
+    // Verify old password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Invalid old password' });
+    }
+
+    // Update fields
+    user.firstName = firstName || user.firstName;
+    user.lastName = lastName || user.lastName;
+    user.dateOfBirth = dateOfBirth || user.dateOfBirth;
+
+    // If a new password is provided, hash it
+    if (newPassword) {
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(newPassword, salt);
+    }
+
+    // Save updated user
+    await user.save();
+
+    // Exclude sensitive fields from response
+    const { password: _, ...updatedUser } = user.toObject();
 
     res.json(updatedUser);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 export const deleteUserProfile = async (req, res) => {
   try {
