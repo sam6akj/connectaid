@@ -11,8 +11,7 @@ const SingleDonation = () => {
   const [donationAmount, setDonationAmount] = useState('');
   const [message, setMessage] = useState('');
   const [showDonateForm, setShowDonateForm] = useState(false);
-  const [walletBalance, setWalletBalance] = useState(0);
-  const [addFundsAmount, setAddFundsAmount] = useState('');
+  const [walletBalance, setWalletBalance] = useState('');
 
   useEffect(() => {
     const fetchAppealAndWallet = async () => {
@@ -37,30 +36,15 @@ const SingleDonation = () => {
     fetchAppealAndWallet();
   }, [id]);
 
-  const handleAddFunds = async (e) => {
-    e.preventDefault();
-    try {
-      const token = localStorage.getItem('authToken');
-      const response = await axios.post('/api/users/wallet/add', 
-        { amount: Number(addFundsAmount) },
-        { headers: { Authorization: `Bearer ${token}` }}
-      );
-      setWalletBalance(response.data.balance);
-      setAddFundsAmount('');
-    } catch (err) {
-      setError(err.response?.data?.message);
-    }
-  };
+
 
   const getImageUrl = (imagePath) => {
-    if (!imagePath) return '/placeholder-image.jpg'; // Replace with your placeholder image
+    if (!imagePath) return '/placeholder-image.jpg'; 
     
-    // If the path already starts with http/https, return as is
     if (imagePath.startsWith('http')) return imagePath;
-    
-    // Remove any leading slashes and combine with your backend URL
+
     const cleanPath = imagePath.replace(/^\/+/, '');
-    // Use your backend URL (adjust if different)
+
     return `${window.location.origin}/${cleanPath}`;
   };
 
@@ -71,28 +55,44 @@ const SingleDonation = () => {
       setError('Insufficient wallet balance');
       return;
     }
-
+  
     try {
       const token = localStorage.getItem('authToken');
       if (!token) {
         navigate('/login');
         return;
       }
-
-      await axios.post('/api/users/donate', {
-        appealId: id,
-        amount: Number(donationAmount),
-        message
-      }, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-
+  
+      // First make the donation and update the wallet
+      await Promise.all([
+        axios.post('/api/users/donate', {
+          appealId: id,
+          amount: Number(donationAmount),
+          message
+        }, {
+          headers: { Authorization: `Bearer ${token}` }
+        }),
+        
+        axios.put('/api/users/wallet/update', {
+          amount: Number(donationAmount),
+          type: 'deduct'
+        }, {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+      ]);
+  
+      // Update the appeal's raised amount
       setAppeal(prev => ({
         ...prev,
         raised: prev.raised + Number(donationAmount)
       }));
       
-      setWalletBalance(prev => prev - Number(donationAmount));
+      // Fetch the latest wallet balance
+      const walletResponse = await axios.get('/api/users/wallet', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      setWalletBalance(walletResponse.data.balance);
       setShowDonateForm(false);
       setDonationAmount('');
       setMessage('');
@@ -143,25 +143,7 @@ const SingleDonation = () => {
           <p className="text-gray-700 whitespace-pre-wrap">{appeal.description}</p>
         </div>
 
-        <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-          <h3 className="font-semibold mb-2">Your Wallet Balance: PKR {walletBalance}</h3>
-          <form onSubmit={handleAddFunds} className="flex gap-2">
-            <input
-              type="number"
-              value={addFundsAmount}
-              onChange={(e) => setAddFundsAmount(e.target.value)}
-              className="flex-1 p-2 border rounded"
-              placeholder="Amount to add"
-              min="1"
-            />
-            <button 
-              type="submit"
-              className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-            >
-              Add Funds
-            </button>
-          </form>
-        </div>
+
 
         {!showDonateForm ? (
           <button

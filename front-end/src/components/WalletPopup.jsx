@@ -29,10 +29,20 @@ const WalletPopup = ({ isOpen, onClose }) => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axios.post('/api/users/wallet/add', 
-        { amount: Number(amount) },
-        { headers: { Authorization: `Bearer ${token}` }}
-      );
+      
+      // Update wallet balance
+      await axios.put('/api/users/wallet/update', {
+        amount: Number(amount),
+        type: 'add'
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+  
+      // Get updated balance
+      const response = await axios.get('/api/users/wallet', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
       setBalance(response.data.balance);
       setAmount('');
       setError('');
