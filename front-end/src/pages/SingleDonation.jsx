@@ -50,9 +50,16 @@ const SingleDonation = () => {
 
   const handleDonate = async (e) => {
     e.preventDefault();
+
+    const remainingGoal = appeal.goal - appeal.raised;
     
     if (Number(donationAmount) > walletBalance) {
       setError('Insufficient wallet balance');
+      return;
+    }
+
+    if (Number(donationAmount) > remainingGoal) {
+      setError('Donation amount exceeds the remaining goal');
       return;
     }
   
@@ -163,10 +170,10 @@ const SingleDonation = () => {
                 value={donationAmount}
                 onChange={(e) => setDonationAmount(e.target.value)}
                 className="w-full p-2 border rounded"
-                placeholder="Enter amount"
+                placeholder={`Enter amount (Max: PKR ${Math.min(walletBalance, appeal.goal - appeal.raised)})`}
                 required
                 min="1"
-                max={walletBalance}
+                max={Math.min(walletBalance, appeal.goal - appeal.raised)} 
               />
             </div>
             <div>

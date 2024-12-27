@@ -3,41 +3,74 @@ import { useNavigate } from 'react-router-dom';
 
 const DonationCallCard = ({ call }) => {
   const navigate = useNavigate();
-  const progress = Math.min((call.raised / call.goal) * 100, 100);
+  
+  const calculateProgress = (raised, goal) => {
+    return Math.min((raised / goal) * 100, 100);
+  };
+
+  const getStatusBadge = () => {
+    switch (call.status) {
+      case 'completed':
+        return (
+          <div className="absolute top-2 right-2 bg-green-500 text-white px-2 py-1 rounded-full text-sm">
+            Completed
+          </div>
+        );
+      case 'cancelled':
+        return (
+          <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-sm">
+            Cancelled
+          </div>
+        );
+      default:
+        return (
+          <div className="absolute top-2 right-2 bg-blue-500 text-white px-2 py-1 rounded-full text-sm">
+            Active
+          </div>
+        );
+    }
+  };
 
   return (
-    <div className="donation-card bg-white rounded-lg overflow-hidden shadow-md flex flex-col">
-      <div className="relative w-full h-48">
-        <img 
-          src={call.image} 
-          alt={call.title} 
-          className="w-full h-full object-cover"
+    <div className="bg-white rounded-lg shadow-md overflow-hidden">
+      <div className="relative">
+        {getStatusBadge()}
+        <img
+          src={call.image || '/placeholder-image.jpg'}
+          alt={call.title}
+          className="w-full h-48 object-cover"
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = '/placeholder-image.jpg';
+          }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-        <div className="absolute bottom-2 left-2 text-white text-xs bg-black/50 px-2 py-1 rounded">
-          {call.category}
-        </div>
       </div>
-      <div className="p-4 flex-1 flex flex-col">
-        <h2 className="text-lg font-semibold text-gray-800 mb-1 line-clamp-2">{call.title}</h2>
-        <p className="text-sm text-gray-600 mb-3 line-clamp-3 flex-1">{call.description}</p>
-        <div className="mb-3">
-          <div className="text-xs text-gray-500 flex justify-between mb-1">
-            <span>PKR {call.raised} raised</span>
-            <span>Goal: PKR {call.goal}</span>
+      <div className="p-4">
+        <h3 className="text-xl font-semibold mb-2">{call.title}</h3>
+        <div className="mb-4">
+          <div className="flex justify-between text-sm text-gray-600">
+            <span>Raised: PKR {call.raised.toLocaleString()}</span>
+            <span>Goal: PKR {call.goal.toLocaleString()}</span>
           </div>
-          <div className="w-full bg-gray-200 h-2 rounded-full">
-            <div 
-              className="h-2 bg-blue-600 rounded-full transition-width duration-300" 
-              style={{ width: `${progress}%` }}
+          <div className="w-full h-2 bg-gray-200 rounded-full mt-2">
+            <div
+              className={`h-2 rounded-full ${
+                call.status === 'completed' ? 'bg-green-500' : 'bg-blue-500'
+              }`}
+              style={{ width: `${calculateProgress(call.raised, call.goal)}%` }}
             ></div>
           </div>
         </div>
         <button
           onClick={() => navigate(`/main/donation-calls/${call._id}`)}
-          className="mt-auto bg-blue-600 hover:bg-blue-700 text-white text-center py-2 rounded-md font-medium"
+          disabled={call.status !== 'active'}
+          className={`w-full py-2 rounded-md text-white ${
+            call.status === 'active'
+              ? 'bg-blue-600 hover:bg-blue-700'
+              : 'bg-gray-400 cursor-not-allowed'
+          }`}
         >
-          View Details
+          {call.status === 'active' ? 'Donate Now' : 'Donation Closed'}
         </button>
       </div>
     </div>

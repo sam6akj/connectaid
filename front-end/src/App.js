@@ -12,6 +12,7 @@ import UserContributions from './pages/UserContributions';
 import DonationAppealsDashboard from './pages/DonationAppealsDashboard';
 import SingleDonation from "./pages/SingleDonation";
 import EditProfile from './pages/EditProfile';
+import EditDonationAppeal from './pages/EditDonationAppeal';
 
 // Protected Route wrapper component
 const ProtectedRoute = ({ children }) => {
@@ -85,6 +86,15 @@ function App() {
               </MainLayout>
             </ProtectedRoute>
             }/>
+
+          <Route path="/main/edit-appeal/:id" element={
+            <ProtectedRoute>
+              <MainLayout>
+                <EditDonationAppeal/>
+              </MainLayout>
+            </ProtectedRoute>
+          }
+          />
 
     
       </Routes>
