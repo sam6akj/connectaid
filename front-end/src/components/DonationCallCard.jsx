@@ -45,10 +45,17 @@ const DonationCallCard = ({ call }) => {
       <div className="p-5">
         <h3 className="text-lg font-semibold mb-3 text-gray-800 line-clamp-2 leading-snug">{call.title}</h3>
         <div className="mb-5">
-          <div className="flex justify-between text-sm text-gray-600 mb-2 font-medium">
-            <span>Raised: PKR {call.raised.toLocaleString()}</span>
-            <span>Goal: PKR {call.goal.toLocaleString()}</span>
+        <div className="flex justify-between text-sm text-gray-600 mb-2 font-medium">
+            <div className="flex-1 text-left">
+              <span>Raised:</span>
+              <span className="ml-2">{`PKR ${call.raised.toLocaleString()}`}</span>
+            </div>
+            <div className="flex-1 text-right">
+              <span>Goal:</span>
+              <span className="ml-2">{`PKR ${call.goal.toLocaleString()}`}</span>
+            </div>
           </div>
+
           <div className="progress-bar-container mt-2">
             <div
               className={`progress-bar ${
