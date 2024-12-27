@@ -26,11 +26,7 @@ app.use("/api/users", userRouter);
 app.use('/uploads', express.static('uploads'));
 
 
-// app.get("/api/users/test", (req, res) => {
-//   res.json({ message: "API is working" });
-// });
 
-// Start the server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

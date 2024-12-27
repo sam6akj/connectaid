@@ -96,7 +96,8 @@ export const makeDonation = async (req, res) => {
       amount,
       message,
       donationAppeal: appealId,
-      donor: userId
+      donor: userId,
+      status: "completed"
     });
 
     await donation.save();
