@@ -31,6 +31,29 @@ const DonationAppealsDashboard = () => {
     return Math.min((raised / goal) * 100, 100);
   };
 
+  const getStatusBadge = (appeal) => {
+    switch (appeal.status) {
+      case 'completed':
+        return (
+          <div className="absolute top-2 right-2 bg-green-500 text-white px-2 py-1 rounded-full text-sm">
+            Completed
+          </div>
+        );
+      case 'cancelled':
+        return (
+          <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-sm">
+            Cancelled
+          </div>
+        );
+      default:
+        return (
+          <div className="absolute top-2 right-2 bg-blue-500 text-white px-2 py-1 rounded-full text-sm">
+            Active
+          </div>
+        );
+    }
+  };
+
   const getImageUrl = (imagePath) => {
     if (!imagePath) return '/placeholder-image.jpg'; // Replace with your placeholder image
     
@@ -68,6 +91,7 @@ const DonationAppealsDashboard = () => {
           {appeals.map((appeal) => (
             <div key={appeal._id} className="bg-white rounded-lg shadow-md overflow-hidden">
               <div className="relative h-48">
+                {getStatusBadge(appeal)}
                 <img 
                   src={getImageUrl(appeal.image)}
                   alt={appeal.title}

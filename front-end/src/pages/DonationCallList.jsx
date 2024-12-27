@@ -8,15 +8,22 @@ const DonationCallsList = () => {
   const [donationCalls, setDonationCalls] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [sortOption, setSortOption] = useState("recent");
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortOption, setSortOption] = useState('recent');
+  const [selectedCategory, setSelectedCategory] = useState('All');
 
   useEffect(() => {
     const fetchDonationCalls = async () => {
       try {
         const response = await axios.get('/api/users/donation-appeals/all');
-        setDonationCalls(response.data);
+
+        // Add a check to update the status of each call based on the goal and raised amount
+        const updatedCalls = response.data.map((call) => ({
+          ...call,
+          status: call.raised >= call.goal ? 'completed' : 'active',
+        }));
+
+        setDonationCalls(updatedCalls);
       } catch (err) {
         setError(err.response?.data?.message || 'Failed to fetch donation calls');
         console.error('Error details:', err);
@@ -24,22 +31,22 @@ const DonationCallsList = () => {
         setLoading(false);
       }
     };
-      
-    fetchDonationCalls();
-  }, []);
 
-  const filteredCalls = donationCalls.filter(call => {
+    fetchDonationCalls();
+  }, []); // Remove dependency on `donationCalls` to avoid infinite re-renders
+
+  const filteredCalls = donationCalls.filter((call) => {
     const matchesSearch = call.title.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === "All" || call.category === selectedCategory;
+    const matchesCategory = selectedCategory === 'All' || call.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
   const sortedCalls = [...filteredCalls].sort((a, b) => {
-    if (sortOption === "recent") {
+    if (sortOption === 'recent') {
       return new Date(b.createdAt) - new Date(a.createdAt);
-    } else if (sortOption === "goal_asc") {
+    } else if (sortOption === 'goal_asc') {
       return a.goal - b.goal;
-    } else if (sortOption === "goal_desc") {
+    } else if (sortOption === 'goal_desc') {
       return b.goal - a.goal;
     }
     return 0;
@@ -47,7 +54,6 @@ const DonationCallsList = () => {
 
   if (loading) return <div className="text-center mt-8">Loading...</div>;
   if (error) return <div className="text-red-500 text-center mt-8">{error}</div>;
-
 
   return (
     <div className="bg-gray-50 min-h-screen">
@@ -76,8 +82,8 @@ const DonationCallsList = () => {
       <div className="max-w-7xl mx-auto py-10 px-4">
         {sortedCalls.length > 0 ? (
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {sortedCalls.map(call => (
-              <DonationCallCard key={call.id} call={call} />
+            {sortedCalls.map((call) => (
+              <DonationCallCard key={call._id} call={call} />
             ))}
           </div>
         ) : (
@@ -88,13 +94,7 @@ const DonationCallsList = () => {
       </div>
 
 
-      {sortedCalls.length > 0 && (
-        <div className="max-w-7xl mx-auto mb-10 px-4 text-center">
-          <button className="mt-8 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
-            Load More
-          </button>
-        </div>
-      )}
+
     </div>
   );
 };

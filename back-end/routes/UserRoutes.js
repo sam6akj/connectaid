@@ -1,11 +1,11 @@
 import express from "express";
 import {addUser,getUserProfile,updateUserProfile,deleteUserProfile} from "../controllers/UserController.js";
 import loginUser from "../controllers/LoginController.js";
-import { getUserAppeals,createDonationAppeal,getUserContributions,makeDonation, getAllDonationAppeals } 
+import { getUserAppeals,createDonationAppeal,getUserContributions,makeDonation, getAllDonationAppeals, updateDonationAppeal } 
 from "../controllers/DonationController.js";
 import authenticateToken from "../middleware/authMiddleware.js";
 import upload from "../middleware/fileUploadMiddileware.js";
-import { getDonationAppeal } from "../controllers/DonationController.js";
+import { getDonationAppeal,cancelDonationAppeal } from "../controllers/DonationController.js";
 import { getWalletBalance,addFunds,updateBalance } from "../controllers/PaymentController.js";
 
 
@@ -29,5 +29,8 @@ userRouter.put('/wallet/update',authenticateToken,updateBalance);
 userRouter.get('/profile', authenticateToken, getUserProfile);
 userRouter.put('/profile', authenticateToken, updateUserProfile);
 userRouter.delete('/profile', authenticateToken, deleteUserProfile);
+
+userRouter.put('/edit-appeal/:id', authenticateToken, upload.single('image'), updateDonationAppeal);
+userRouter.delete('/cancel-appeal/:id', authenticateToken, cancelDonationAppeal);
 
 export default userRouter;
