@@ -34,7 +34,7 @@ A Donation platform that connects donors to people in need. Created using MERN S
 
 2. Create .env file in **back-end** directory
 
-    Use a MongoDB connection string
+    Use a MongoDB connection string and a JWT Secret key
    
     ```sh
     MONGODB_URI = mongodb+srv://<username>:<password>@<cluster-name>.bqydw.mongodb.net/?retryWrites=true&w=majority&appName=<clustor-name>
