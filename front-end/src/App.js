@@ -14,7 +14,7 @@ import SingleDonation from "./pages/SingleDonation";
 import EditProfile from './pages/EditProfile';
 import EditDonationAppeal from './pages/EditDonationAppeal';
 
-// Protected Route wrapper component
+
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem('authToken');
   if (!token) {

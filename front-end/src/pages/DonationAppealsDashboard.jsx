@@ -55,14 +55,12 @@ const DonationAppealsDashboard = () => {
   };
 
   const getImageUrl = (imagePath) => {
-    if (!imagePath) return '/placeholder-image.jpg'; // Replace with your placeholder image
+    if (!imagePath) return ''; 
     
-    // If the path already starts with http/https, return as is
     if (imagePath.startsWith('http')) return imagePath;
     
-    // Remove any leading slashes and combine with your backend URL
+    // Remove any leading slashes
     const cleanPath = imagePath.replace(/^\/+/, '');
-    // Use your backend URL (adjust if different)
     return `${window.location.origin}/${cleanPath}`;
   };
 
@@ -98,7 +96,7 @@ const DonationAppealsDashboard = () => {
                   className="w-full h-full object-cover"
                   onError={(e) => {
                     e.target.onerror = null; // Prevent infinite loop
-                    e.target.src = '/placeholder-image.jpg'; // Replace with your placeholder image
+                    e.target.src = ''; 
                   }}
                 />
               </div>
