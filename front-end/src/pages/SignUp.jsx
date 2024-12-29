@@ -39,7 +39,6 @@ const SignUp = () => {
             setLoading(false);
 
             if (error.response) {
-                // Server responded with a status other than 200
                 setMessage(error.response.data.message);
             } else {
                 setMessage('An error occurred. Please try again.');

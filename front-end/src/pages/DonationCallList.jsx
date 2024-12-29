@@ -17,7 +17,7 @@ const DonationCallsList = () => {
       try {
         const response = await axios.get('/api/users/donation-appeals/all');
 
-        // Add a check to update the status of each call based on the goal and raised amount
+        // a check to update the status of each call based on the goal and raised amount
         const updatedCalls = response.data.map((call) => ({
           ...call,
           status: call.raised >= call.goal ? 'completed' : 'active',
@@ -33,7 +33,7 @@ const DonationCallsList = () => {
     };
 
     fetchDonationCalls();
-  }, []); // Remove dependency on `donationCalls` to avoid infinite re-renders
+  }, []);
 
   const filteredCalls = donationCalls.filter((call) => {
     const matchesSearch = call.title.toLowerCase().includes(searchTerm.toLowerCase());

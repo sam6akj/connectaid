@@ -29,7 +29,7 @@ const Login = () => {
       setLoading(false);
 
       if (error.response) {
-        setMessage(error.response.data.message); // Display error from server
+        setMessage(error.response.data.message); 
       } else {
         setMessage('An error occurred. Please try again.');
       }

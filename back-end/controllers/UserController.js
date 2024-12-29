@@ -50,7 +50,6 @@ export const updateUserProfile = async (req, res) => {
   try {
     const { firstName, lastName, password, newPassword, dateOfBirth } = req.body;
 
-    // Fetch user from database
     const user = await User.findById(req.user.userId);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
@@ -62,21 +61,18 @@ export const updateUserProfile = async (req, res) => {
       return res.status(401).json({ message: 'Invalid old password' });
     }
 
-    // Update fields
     user.firstName = firstName || user.firstName;
     user.lastName = lastName || user.lastName;
     user.dateOfBirth = dateOfBirth || user.dateOfBirth;
 
-    // If a new password is provided, hash it
+
     if (newPassword) {
       const salt = await bcrypt.genSalt(10);
       user.password = await bcrypt.hash(newPassword, salt);
     }
 
-    // Save updated user
     await user.save();
 
-    // Exclude sensitive fields from response
     const { password: _, ...updatedUser } = user.toObject();
 
     res.json(updatedUser);
@@ -88,7 +84,6 @@ export const updateUserProfile = async (req, res) => {
 
 export const deleteUserProfile = async (req, res) => {
   try {
-    // Start a transaction
     const session = await mongoose.startSession();
     session.startTransaction();
 
@@ -102,7 +97,7 @@ export const deleteUserProfile = async (req, res) => {
         { status: 'cancelled' }
       );
 
-      // Delete user
+
       await User.findByIdAndDelete(req.user.userId);
 
       await session.commitTransaction();
