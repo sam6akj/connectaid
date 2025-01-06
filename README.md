@@ -3,7 +3,7 @@ A Donation platform that connects donors to people in need. Created using MERN S
 
 ## Prerequisites
 
-  - Node
+  - Nodejs
   - npm
   - MongoDB Atlas account or locally installed 
 
@@ -38,6 +38,12 @@ A Donation platform that connects donors to people in need. Created using MERN S
    
     ```sh
     MONGODB_URI = mongodb+srv://<username>:<password>@<cluster-name>.bqydw.mongodb.net/?retryWrites=true&w=majority&appName=<clustor-name>
+    JWT_SECRET = <your-secret-key>
+    ```
+    <h4>OR</h4>
+    
+    ```sh
+    MONGODB_URI = <your-connection-string>
     JWT_SECRET = <your-secret-key>
     ```
 
