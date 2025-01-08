@@ -94,7 +94,7 @@ const EditDonationAppeal = () => {
 
         <FormInput
           type="number"
-          label="Goal Amount (PKR)"
+          label="Goal Amount (INR)"
           value={appealData.goal}
           onChange={(e) => setAppealData({...appealData, goal: e.target.value})}
           required

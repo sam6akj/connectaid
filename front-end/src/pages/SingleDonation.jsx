@@ -131,8 +131,8 @@ const SingleDonation = () => {
         
         <div className="mb-6">
           <div className="flex justify-between mb-2">
-            <span className="text-gray-600">Raised: PKR {appeal.raised}</span>
-            <span className="text-gray-600">Goal: PKR {appeal.goal}</span>
+            <span className="text-gray-600">Raised: INR {appeal.raised}</span>
+            <span className="text-gray-600">Goal: INR {appeal.goal}</span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2.5">
             <div 
@@ -163,14 +163,14 @@ const SingleDonation = () => {
           <form onSubmit={handleDonate} className="space-y-4">
             <div>
               <label className="block text-sm font-medium mb-2">
-                Amount (PKR)
+                Amount (INR)
               </label>
               <input
                 type="number"
                 value={donationAmount}
                 onChange={(e) => setDonationAmount(e.target.value)}
                 className="w-full p-2 border rounded"
-                placeholder={`Enter amount (Max: PKR ${Math.min(walletBalance, appeal.goal - appeal.raised)})`}
+                placeholder={`Enter amount (Max: INR ${Math.min(walletBalance, appeal.goal - appeal.raised)})`}
                 required
                 min="1"
                 max={Math.min(walletBalance, appeal.goal - appeal.raised)} 

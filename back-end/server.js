@@ -4,10 +4,12 @@ import express from "express";
 import userRouter from "./routes/UserRoutes.js";
 
 dotenv.config();
+const uri = process.env.MONGO_URI;
+
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGODB_URI);
+    await mongoose.connect(uri);
     console.log("MongoDB connection successful!");
   } catch (err) {
     console.error("MongoDB connection failed: ", err.message);

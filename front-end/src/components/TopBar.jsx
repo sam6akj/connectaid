@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const TopBar = ({ onToggleSidebar }) => {
   const navigate = useNavigate();
@@ -10,7 +10,9 @@ const TopBar = ({ onToggleSidebar }) => {
           <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
         </svg>
       </button>
+      <Link to="/main">
       <h1 className="text-xl font-bold text-white">ConnectAid</h1>
+      </Link>
       <div className="ml-auto flex items-center space-x-4">
         <button className="text-white hover:text-blue-600 font-semibold focus:outline-none" onClick={()=>{navigate("/login")}}>
           Logout

@@ -8,7 +8,7 @@ const ContributionCard = ({ contribution }) => {
             {contribution.donationAppeal.title}
           </h3>
           <div className="text-gray-600 mb-4">
-            <p className="text-sm">Amount: <span className="font-medium">PKR {contribution.amount}</span></p>
+            <p className="text-sm">Amount: <span className="font-medium">INR {contribution.amount}</span></p>
             <p className="text-sm">Date: <span className="font-medium">{new Date(contribution.createdAt).toLocaleDateString()}</span></p>
             <p className="text-sm">Status: <span className={`font-medium capitalize ${contribution.status === 'completed' ? 'text-green-600' : 'text-gray-600'}`}>
               {contribution.status}

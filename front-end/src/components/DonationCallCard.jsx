@@ -48,11 +48,11 @@ const DonationCallCard = ({ call }) => {
         <div className="flex justify-between text-sm text-gray-600 mb-2 font-medium">
             <div className="flex-1 text-left">
               <span>Raised:</span>
-              <span className="ml-2">{`PKR ${call.raised.toLocaleString()}`}</span>
+              <span className="ml-2">{`INR ${call.raised.toLocaleString()}`}</span>
             </div>
             <div className="flex-1 text-right">
               <span>Goal:</span>
-              <span className="ml-2">{`PKR ${call.goal.toLocaleString()}`}</span>
+              <span className="ml-2">{`INR ${call.goal.toLocaleString()}`}</span>
             </div>
           </div>
 

@@ -65,7 +65,7 @@ const WalletPopup = ({ isOpen, onClose }) => {
         
         <div className="mb-6">
           <p className="text-gray-600">Current Balance</p>
-          <p className="text-2xl font-bold">PKR {balance}</p>
+          <p className="text-2xl font-bold">INR {balance}</p>
         </div>
 
         <form onSubmit={handleAddFunds} className="space-y-4">

@@ -74,7 +74,7 @@ const AddDonationCall = () => {
 
         <FormInput
           type="number"
-          label="Goal Amount (PKR)"
+          label="Goal Amount (INR)"
           value={goal}
           onChange={(e) => setGoal(e.target.value)}
           placeholder="Enter your donation goal amount"
