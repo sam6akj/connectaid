@@ -18,7 +18,7 @@ const Login = () => {
       setLoading(true);
       setMessage(null);
 
-      const response = await axios.post('/api/users/login', { email, password });
+      const response = await axios.post('https://connectaid-backend.onrender.com/api/users/login', { email, password });
 
       localStorage.setItem('authToken', response.data.token);
       setMessage(response.data.message); 
