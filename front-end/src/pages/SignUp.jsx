@@ -18,7 +18,7 @@ const SignUp = () => {
             setLoading(true);
             setMessage(null);
 
-            const response = await axios.post('/api/users/signup', {
+            const response = await axios.post('https://connectaid-backend.onrender.com/api/users/signup', {
                 firstName,
                 lastName,
                 email,
